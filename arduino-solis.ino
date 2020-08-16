@@ -1,5 +1,6 @@
 #include <FastLED.h>
 #include <Vector.h>
+#include "Gradient.h"
 
 using namespace std;
 
@@ -8,47 +9,23 @@ using namespace std;
 
 CRGB leds[NUMPIXELS];
 
+Gradient testGrad = Gradient();
+
 void setup() {
   FastLED.addLeds<WS2812B, PIN, GRB>(leds, NUMPIXELS).setCorrection(TypicalLEDStrip);
   
   Serial.begin(115200);
+
+  testGrad.add(0, 255);
+  testGrad.add(0.25, 60);
+  testGrad.add(0.5, 120);
+  testGrad.add(1, 0);
 }
 
 int HALFNUMPIXELS = round(NUMPIXELS / 2);
 
 float timeyWimey = 0;
 int center = 60;
-
-
-class GradientPoint {
-  public:
-    float position;
-    CRGB color;
-
-  public:
-    GradientPoint(
-      CRGB color,
-      float position
-    ) {
-      this->color = color;
-      this->position = position; 
-    }
-};
-
-class Gradient {
-  protected:
-    Vector<GradientPoint> points;
-
-  public:
-    Gradient() {
-      
-    }
-
-    void add(GradientPoint point) {
-      this->points.push_back(point);
-    }
-};
-
 
 float falloff = 8;
 //float fDistance = 1 / (2 * falloff);
@@ -102,9 +79,12 @@ void loop() {
     float b = 1; // min(1.0f, max(0.0f, 1 / (1 * (1 - nIndex) + 1)));
 
     CRGB pixelColor = CRGB(
-      r * 60 * brightness,
-      g * 60 * brightness,
-      b * 60 * brightness
+      testGrad.valueAt(nIndex),
+      testGrad.valueAt(nIndex),
+      testGrad.valueAt(nIndex)
+//      r * 60 * brightness,
+//      g * 60 * brightness,
+//      b * 60 * brightness
     );
 
     int led = (center - i) % NUMPIXELS;

@@ -1,6 +1,6 @@
+#include <ArduinoSTL.h>
 #include <vector>
 #include <iterator>
-#include <iostream>
 
 #include "GradientPoint.h"
 
@@ -62,8 +62,6 @@ class Gradient {
       ) {
         currentPoint = &*i;
 
-        // std::cout << "Current Point: " + std::to_string(currentPoint->position) << std::endl;
-
         if (currentPoint->position <= position) {
           leftPoint = currentPoint;
           foundLeft = true;
@@ -82,10 +80,6 @@ class Gradient {
         }
       }
 
-      // std::cout << "Left:  " + std::to_string(leftPoint->position) << std::endl;
-      // std::cout << "Right: " + std::to_string(rightPoint->position) << std::endl;
-
       return leftPoint->value + ((rightPoint->value - leftPoint->value) * ((position - leftPoint->position) / rightPoint->position));
     }
 };
-
